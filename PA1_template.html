@@ -8,6 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
+<meta name="author" content="James Longman" />
 
 
 <title>Reproducible Research: Peer Assessment 1</title>
@@ -61,13 +62,13 @@ img {
 
 <div id="header">
 <h1 class="title">Reproducible Research: Peer Assessment 1</h1>
+<h4 class="author"><em>James Longman</em></h4>
 </div>
 
 
 <div id="loading-and-preprocessing-the-data" class="section level2">
 <h2>Loading and preprocessing the data</h2>
 <pre class="r"><code># read the data in to dOrig and convert date variable
-setwd(&quot;e:/_cloud-sync/Dropbox/coursera/datascience/5. Reproducilble Research/p1&quot;)
 dOrig &lt;- read.csv(&quot;./activity.csv&quot;)
 dOrig$date &lt;- as.Date(dOrig$date)
 

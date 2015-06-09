@@ -1,11 +1,11 @@
 # Reproducible Research: Peer Assessment 1
+James Longman  
 
 
 ## Loading and preprocessing the data
 
 ```r
 # read the data in to dOrig and convert date variable
-setwd("e:/_cloud-sync/Dropbox/coursera/datascience/5. Reproducilble Research/p1")
 dOrig <- read.csv("./activity.csv")
 dOrig$date <- as.Date(dOrig$date)
 
