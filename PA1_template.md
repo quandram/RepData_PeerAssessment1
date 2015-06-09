@@ -1,13 +1,9 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
-``` {r,echo=TRUE}
+
+```r
 # read the data in to dOrig and convert date variable
 setwd("e:/_cloud-sync/Dropbox/coursera/datascience/5. Reproducilble Research/p1")
 dOrig <- read.csv("./activity.csv")
@@ -36,7 +32,6 @@ dOrigIntSummary <- dOrigIntSummary[,list(mean=as.numeric(mean(steps, na.rm="true
                percentDiffFromMean=as.numeric(mean(steps, na.rm="true")/m)
                ), 
          by=interval]
-
 ```
 
 
@@ -44,22 +39,33 @@ dOrigIntSummary <- dOrigIntSummary[,list(mean=as.numeric(mean(steps, na.rm="true
 
 The total number of steps taken per day is shown by this histogram:
 
-```{r,echo=TRUE}
 
+```r
 hist(dOrigDateSummary$total, breaks=50, main="", xlab="Total number of steps", ylab="Frequency")
-
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
 
 The mean total number of steps per day is:
 
-```{r,echo=TRUE}
+
+```r
 mean(dOrigDateSummary$total, na.rm="true")
+```
+
+```
+## [1] 9354.23
 ```
 
 The median total number of steps per day is:
 
-```{r,echo=TRUE}
+
+```r
 median(dOrigDateSummary$total, na.rm="true")
+```
+
+```
+## [1] 10395
 ```
 
 
@@ -67,27 +73,39 @@ median(dOrigDateSummary$total, na.rm="true")
 
 The following plot shows the average daily activity pattern:
 
-``` {r,echo=TRUE}
-plot(dOrigIntSummary$interval, dOrigIntSummary$mean, type="l", xlab="Interval", ylab="mean number of steps")
 
+```r
+plot(dOrigIntSummary$interval, dOrigIntSummary$mean, type="l", xlab="Interval", ylab="mean number of steps")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
+
 The 5 minute interval with the highest average number of steps is:
-```{r,echo=TRUE}
+
+```r
 dOrigIntSummary[dOrigIntSummary$mean == max(dOrigIntSummary$mean),]$interval
+```
+
+```
+## [1] 835
 ```
 
 ## Imputing missing values
 
 The total number of missing values in the dataset is: 
-```{r,echo=TRUE}
+
+```r
 sum(is.na(dOrig$steps))
+```
+
+```
+## [1] 2304
 ```
 
 To fill in the missing values I will create a function that takes the mean number of steps per interval and multiply it by the percentage variance from the mean for the day and interval for which the value is being calculated.  I will then run this function on the missing date/interval pairs to fill in the values.
 
-```{r,echo=TRUE}
 
+```r
 # duplicate base data set
 dCalc <- dOrig
 
@@ -114,35 +132,45 @@ for(i in 1:length(indxNA)){
 # construct new data tables from calculated dataset
 dCalcDateSummary <- data.table(dCalc)
 dCalcDateSummary <- dCalcDateSummary[,list(total=sum(steps)), by=date]
-
 ```
 
 Using the revised dataset the total number of steps taken per day is shown by this histogram:
 
-```{r,echo=TRUE}
 
+```r
 hist(dCalcDateSummary$total, breaks=50, main="", xlab="Total number of steps", ylab="Frequency")
-
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-9-1.png) 
 
 The mean total number of steps per day is:
 
-```{r,echo=TRUE}
+
+```r
 mean(dCalcDateSummary$total, na.rm="true")
+```
+
+```
+## [1] 10859.34
 ```
 
 The median total number of steps per day is:
 
-```{r,echo=TRUE}
+
+```r
 median(dCalcDateSummary$total, na.rm="true")
+```
+
+```
+## [1] 11458
 ```
 
 These calculated values are higher than the original estimates.  Predictably adding values that are calcualted from the existing mean will increase the number of steps and thus the total, mean & median in the dataset compared with NULL values.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r,echo=TRUE, fig.height=10}
 
+```r
 # create a factor for showing weekends
 dCalc$IsWeekend <- as.factor(ifelse(weekdays(dCalc$date) %in% c("Saturday","Sunday"), "weekend", "weekday"))
 
@@ -159,5 +187,6 @@ dCalcIntSummaryEnd <- dCalcIntSummaryEnd[,list(mean=mean(steps)), by=interval]
 par(mfrow=c(2,1))
 plot(dCalcIntSummaryDay$interval, dCalcIntSummaryDay$mean, type="l", main="average activity for weekdays", xlab="Interval", ylab="mean number of steps")
 plot(dCalcIntSummaryEnd$interval, dCalcIntSummaryEnd$mean, type="l", main="average activity for weekends", xlab="Interval", ylab="mean number of steps")
-
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-12-1.png) 
